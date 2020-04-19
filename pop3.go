@@ -221,3 +221,15 @@ func (c *Client) Quit() error {
 	c.conn.Close()
 	return nil
 }
+
+// Top gets only the headers and top n lines of the body
+func (c *Client) Top(msgid int, bodyLines int) (text string, err error) {
+	_, err = c.Cmd("TOP %d %d\r\n", msgid, bodyLines)
+	if err != nil {
+		return "", err
+	}
+	lines, err := c.ReadLines()
+	text = strings.Join(lines, "\n")
+	return
+}
+
